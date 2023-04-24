@@ -1,115 +1,56 @@
-import Head from 'next/head';
+import Head from "next/head";
+import {useState} from "react";
 import styles from '../styles/Home.module.css';
+import Player from "./player";
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    const [promptInput, setPromptInput] = useState('');
+    const [renderIds, setRenderIds] = useState(['mQ8LS7vvybEG1BJkuML0V0wXzqcF','FrsHA7K3TS4fS6ep88tbaTxh9PqL']);
+    const [downloadLink, setDownloadLink] = useState('https://s3.amazonaws.com/prod-amper-inferno-ephemeral/renders/2023/04/26/amper-api-7NeQKNS7MnhPx1wDw7nZRrak0fgn/0.mp3');
 
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    async function getRenders() {
+        const res = await fetch(`/api/renders`);
+        return res.json();
+    }
 
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
+    async function getDownloads(renderId) {
+        // const res = await fetch(`/api/renders/${renderId}`);
+        console.log('entered getDownloads');
+        const res = await fetch(`/api/render?id=${renderId}`);
+        return res.json();
+    }
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+    async function onSubmit(event) {
+        event.preventDefault();
+        const renders = await getRenders();
+        setRenderIds(renders.result);
+        console.log(renders.result[0]);
+        const downloads = await getDownloads(renders.result[0]);
+        setDownloadLink(downloads.downloadLink);
+    }
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+    return (
+        <div>
+            <Head>
+                <title>Test Music Gen</title>
+            </Head>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+            <main className={styles.main}>
+                <h3>What style of music</h3>
+                <form onSubmit={onSubmit}>
+                    <input
+                        type="text"
+                        name="prompt"
+                        placeholder="Enter a music style"
+                        value={promptInput}
+                        onChange={(e) => setPromptInput(e.target.value)}
+                    />
+                    <input type="submit" value="Generate music"/>
+                </form>
+                <div className={styles.result}>{renderIds.toString()}</div>
+                <div className={styles.result}>{downloadLink}</div>
+                <Player url={downloadLink}/>
+            </main>
         </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  )
+    );
 }

@@ -6,8 +6,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "bluebird": "^3.7.2",
     "next": "latest",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "shutterstock-api": "^1.1.32"
   }
 }
