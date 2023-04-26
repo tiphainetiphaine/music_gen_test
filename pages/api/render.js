@@ -5,7 +5,6 @@ sstk.setAccessToken(process.env.SHUTTERSTOCK_API_TOKEN);
 const api = new sstk.CustomMusicApi();
 
 export default async function (req, res) {
-    console.log('id is in new function' + req.query.id);
     const renderId = req.query.id;
 
     if (renderId.trim().length === 0) {
@@ -27,9 +26,8 @@ export default async function (req, res) {
     let status;
     let downloadLink;
     let timeElapsed = 0;
-    let timeout = 60 * 5; //timeout set at 5 minutes
+    let timeout = 60 * 2; //timeout set at 2 minutes
     do {
-        // handleNoId();
         await api.fetchRenders([renderId])
             .then(async (data) => {
                 console.log(data);
@@ -41,8 +39,8 @@ export default async function (req, res) {
                         }
                     });
                 }
-                await Bluebird.delay(5000);
-                timeElapsed = timeElapsed + 5;
+                await Bluebird.delay(4000);
+                timeElapsed = timeElapsed + 4;
                 console.log(`time elapsed is ${timeElapsed}`);
             })
             .catch((error) => {
