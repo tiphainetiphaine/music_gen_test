@@ -1,4 +1,4 @@
-export const RENDERS = (renderTime) => {
+export const RENDERS = (audioLength) => {
     return {
         "audio_renders": [
             {
@@ -22,7 +22,7 @@ export const RENDERS = (renderTime) => {
                         },
                         {
                             "span_type": "unmetered",
-                            "time": parseInt(renderTime)
+                            "time": parseInt(audioLength)
                         }
                     ]
                 }
@@ -48,7 +48,7 @@ export const RENDERS = (renderTime) => {
                         },
                         {
                             "span_type": "unmetered",
-                            "time": parseInt(renderTime)
+                            "time": parseInt(audioLength)
                         }
                     ]
                 }

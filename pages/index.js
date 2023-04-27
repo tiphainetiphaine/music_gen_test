@@ -4,12 +4,12 @@ import styles from '../styles/Home.module.css';
 import Player from "./player";
 
 export default function Home() {
-    const [renderLength, setRenderLength] = useState('');
+    const [audioLength, setAudioLength] = useState('');
     const [renderIds, setRenderIds] = useState(['']);
     const [downloadLinks, setDownloadLinks] = useState(['']);
 
     async function getRenders() {
-        const res = await fetch(`/api/renders?length=${renderLength}`);
+        const res = await fetch(`/api/renders?length=${audioLength}`);
         return res.json();
     }
 
@@ -39,14 +39,14 @@ export default function Home() {
             </Head>
 
             <main className={styles.main}>
-                <h3>Enter the render time, in a format like 6.0</h3>
+                <h3>Enter the audio length, in a format like 6.0</h3>
                 <form onSubmit={onSubmit}>
                     <input
                         type="text"
                         name="prompt"
-                        placeholder="Enter the render time"
-                        value={renderLength}
-                        onChange={(e) => setRenderLength(e.target.value)}
+                        placeholder="Enter the audio length"
+                        value={audioLength}
+                        onChange={(e) => setAudioLength(e.target.value)}
                     />
                     <input type="submit" value="Generate music"/>
                 </form>
