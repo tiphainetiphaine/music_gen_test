@@ -9,3 +9,5 @@ Enter an audio length in a format like "6.0" to kick of two renders, in the them
 These are "cinematic_minimal_tense" and "documentary_underscore_heartfelt"
 
 Once rendered these will be available to play in the browser
+
+You will need to sign up for an API key [as per the instructions here](https://www.shutterstock.com/developers/documentation/getting-started) and add it to your .env file for this app to work for you locally!
